@@ -23,13 +23,12 @@ class index_controller extends Controller{
         //$data = $obj ->where($where)->find();
 
         //查询一个字段或者多个字段(完成)
-        $data = $obj->where($where)->getField('title,desc',true);
+       // $datas = $obj->where($where)->getField('title,id',true);
 
         //join 方式查询完成
-        // $data = $obj
-        //     -> table('__test a')
-        //     -> join('LEFT JOIN __test_one b ON a.id=b.cid')
-        //     -> getField('b.title,a.desc',true);
-        dump($data);
+         $data = $obj
+             -> table('__test a')
+             -> join('LEFT JOIN __test_one b ON a.id=b.cid')
+             -> getField('b.title,a.desc',true);
     }
 }

@@ -121,7 +121,7 @@ class Model
             $field_data = explode(',', $field);
             $count = count($field_data);
             if ($count == 2) {
-            //如果为多个个字段,自动以第一个字段为key第二个字段为value
+                //如果为多个个字段,自动以第一个字段为key第二个字段为value
                 if($table == $this ->model){
                     $field_arr[0] = '`' . $field_data[0] . '`';
                     $field_arr[1] = '`' . $field_data[1] . '`';
@@ -136,18 +136,19 @@ class Model
                     $datas = $datas->fetch(PDO::FETCH_ASSOC);
                     $field_data[0] = explode('.', $field_data[0]);
                     $field_data[1] = explode('.', $field_data[1]);
-                 
                     //普通关联查询待完成
-                    if($field_data[0][1] || $field_data[1][1]){
+                    if(!empty($field_data[0][1]) || !empty($field_data[1][1])){
                         $field_data[0] = $field_data[0][1];
                         $field_data[1] = $field_data[1][1];
-                        dump($field_data);
-                        // $data[$datas[$field_data[0][0]]] = $datas[$field_data[1][0]];
+                        $data[$datas[$field_data[0]]] = $datas[$field_data[1]];
+                        return $data;
                     }else{
-                        $data[$datas[$field_data[0][0]]] = $datas[$field_data[1][0]];
-                    }
+                       $key  = $field_data[0][0];
+                       $value  = $field_data[1][0];
+                       $data[$datas[$key]] = $datas[$value];
+                       return $data;
+                    }  
                     
-                
                     
                 }
             } else {
@@ -167,6 +168,7 @@ class Model
                     }
                 }
                 $data = array_filter($data);
+                return $data;
             }
         } else {
             //查询单个字段单数据
@@ -181,10 +183,11 @@ class Model
                         $field = $value[1];
                     }
                     $data = $data[$field];
+                    return $data;
                 }
             }
         }
-        return $data;
+        
     }
 
     /**

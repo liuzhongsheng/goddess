@@ -8,6 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: 普罗米修斯 <996674366@qq.com>
 // +----------------------------------------------------------------------
+header("Content-type:text/html;charset=utf-8");
 ini_set("display_errors", "On");
 error_reporting(E_ALL | E_STRICT);
 ob_start();
