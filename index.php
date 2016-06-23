@@ -8,8 +8,11 @@
 // +----------------------------------------------------------------------
 // | Author: 普罗米修斯 <996674366@qq.com>
 // +----------------------------------------------------------------------
+ini_set("display_errors", "On");
+error_reporting(E_ALL | E_STRICT);
+ob_start();
 // 检测PHP环境
-if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
+if(version_compare(PHP_VERSION,'5.3.0','<'))  die('php版本必须大于5.3.0 !');
 //定义应用目录
 defined('APP_PATH') OR define('APP_PATH','./Application/');
 //框架入口文件
