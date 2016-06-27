@@ -79,6 +79,10 @@ class Start
             //     if($dir[0].'\\'.$dir[1]){
             //         $url =  APP_PATH.implode('/',$dir).CLASS_SUFFIX;
             //     }
+        }else{
+            if($dir[0].'\\'.$dir[1]){
+                $url =  APP_PATH.implode('/',$dir).CLASS_SUFFIX;
+            }
         }
         if (file_exists($url)) {
             require_once $url;

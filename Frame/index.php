@@ -23,7 +23,7 @@ defined('LIB_PATH') or define('LIB_PATH', realpath(SYSTEM_PATH . 'Library') . '/
 //定义系统函数文件
 defined('SYSTEM_FUNC') or define('SYSTEM_FUNC', SYSTEM_PATH.'Common/');
 //应用公用文件
-defined('PUBLIC_FUNC') or define('PUBLIC_FUNC', APP_PATH.'Public/Common/');
+defined('PUBLIC_FUNC') or define('PUBLIC_FUNC', APP_PATH.'Common/Common/');
 
 require LIB_PATH . 'Start' . CLASS_SUFFIX;
 $obj = new Frame\Start();
