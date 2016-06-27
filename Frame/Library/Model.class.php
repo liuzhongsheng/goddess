@@ -19,15 +19,18 @@ class Model
         'where' => '',
         'field' => '',
         'table' => '',
-        'join'  => ''
+        'join'  => '',
+        'limit' => '',
+        'order' => ''
     );
     private $model = '';
     private $prefix = '';
+
     public function __construct()
     {
 
         $table = explode('\\', get_class($this));
-        $this -> prefix = load_config('DB_PREFIX');
+        $this->prefix = load_config('DB_PREFIX');
         // $this->model = load_config('DB_PREFIX') . substr($table[2], 0, strlen($table[2]) - 6);
         $this->model = 'a_test';
         $db_host = load_config('DB_HOST');
@@ -39,11 +42,13 @@ class Model
             $this->db = new PDO("mysql:host={$db_host};dbname={$db_name}", $db_user, $db_pwd);
             $this->db->query("SET NAMES {$db_charset}");
         } catch (PDOException $e) {
+
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }
     }
 
+    /** 以下为条件处理 **/
     /**
      * 查询条件
      * @author 普罗米修斯 www.php63.cc
@@ -88,28 +93,62 @@ class Model
         $this->sql['field'] = $field;
         return $this;
     }
+
     /**
      * 链表查询主表
      * @param $table string 要查询的主表 格式: '__test a'
      * @author 普罗米修斯 www.php63.cc
      **/
-    public function table($table = ''){
-        if($table != ''){
+    public function table($table = '')
+    {
+        if ($table != '') {
             //将前面指定字符替换为表前缀
-            $this -> sql['table'] = str_replace('__',$this -> prefix,$table);
+            $this->sql['table'] = str_replace('__', $this->prefix, $table);
         }
         return $this;
     }
 
     /* 链表查询 */
-    public function join($join=''){
-        if($join != ''){
+    public function join($join = '')
+    {
+        if ($join != '') {
             //将前面指定字符替换为表前缀
-            $this -> sql['join'] = str_replace('__',$this -> prefix,$join);
+            $this->sql['join'] = str_replace('__', $this->prefix, $join);
         }
         return $this;
     }
 
+    /* limit 分页参数 */
+    public function limit($start_num, $page_num)
+    {
+        $this->sql['limit'][0] = $start_num;
+        $this->sql['limit'][1] = $page_num;
+        $this->sql['limit'] = implode(',', $this->sql['limit']);
+        return $this;
+    }
+
+    /* order 排序 */
+    public function order($order)
+    {
+        $this->sql['order'] = $order;
+        return $this;
+    }
+
+    /**
+     * 检测是否为join连接
+     * @author 普罗米修斯 www.php63.cc
+     * @return string 返回表名或者join串
+     */
+    protected function check_join()
+    {
+        if ($this->sql['join'] != '' && $this->sql['table'] != '') {
+            $table = $this->sql['table'] . ' ' . $this->sql['join'];
+        } else {
+            $table = $this->model;
+        }
+        return $table;
+    }
+    /***** 以下为查询操作  ******/
     /**
      * 查询某个字段或者多个字段
      * @author 普罗米修斯 www.php63.cc
@@ -117,48 +156,49 @@ class Model
     public function getField($field, $type = false)
     {
         $table = self::check_join();
+        $order = self::_ordere();
         if ($type) {
             $field_data = explode(',', $field);
             $count = count($field_data);
             if ($count == 2) {
                 //如果为多个个字段,自动以第一个字段为key第二个字段为value
-                if($table == $this ->model){
+                if ($table == $this->model) {
                     $field_arr[0] = '`' . $field_data[0] . '`';
                     $field_arr[1] = '`' . $field_data[1] . '`';
-                }else{
+                } else {
                     $field_arr[0] = $field_data[0];
                     $field_arr[1] = $field_data[1];
                 }
                 $field = implode(',', $field_arr);
-                $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . ' limit 0,1';
+                $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order . ' limit 0,1';
                 $datas = $this->query($sql);
                 if ($datas) {
                     $datas = $datas->fetch(PDO::FETCH_ASSOC);
                     $field_data[0] = explode('.', $field_data[0]);
                     $field_data[1] = explode('.', $field_data[1]);
                     //普通关联查询待完成
-                    if(!empty($field_data[0][1]) || !empty($field_data[1][1])){
+                    if (!empty($field_data[0][1]) || !empty($field_data[1][1])) {
                         $field_data[0] = $field_data[0][1];
                         $field_data[1] = $field_data[1][1];
                         $data[$datas[$field_data[0]]] = $datas[$field_data[1]];
                         return $data;
-                    }else{
-                       $key  = $field_data[0][0];
-                       $value  = $field_data[1][0];
-                       $data[$datas[$key]] = $datas[$value];
-                       return $data;
-                    }  
-                    
-                    
+                    } else {
+                        $key = $field_data[0][0];
+                        $value = $field_data[1][0];
+                        $data[$datas[$key]] = $datas[$value];
+                        return $data;
+                    }
+
+
                 }
             } else {
                 //查询单字段多数据
-                $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'];
+                $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order;
                 $datas = $this->query($sql);
                 if ($datas) {
                     $datas = $datas->fetchAll(PDO::FETCH_ASSOC);
                     $value = explode('.', $field);
-                    if($value){
+                    if ($value) {
                         $field = $value[1];
                     }
                     foreach ($datas as $key => $value) {
@@ -172,14 +212,14 @@ class Model
             }
         } else {
             //查询单个字段单数据
-            $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . ' limit 0,1';
+            $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order . ' limit 0,1';
             $data = $this->query($sql);
             if ($data) {
                 $data = $data->fetch(PDO::FETCH_ASSOC);
                 if (!empty($data)) {
                     //检测是否为join查询如果是则去除前缀
                     $value = explode('.', $field);
-                    if($value){
+                    if ($value) {
                         $field = $value[1];
                     }
                     $data = $data[$field];
@@ -187,7 +227,7 @@ class Model
                 }
             }
         }
-        
+
     }
 
     /**
@@ -199,7 +239,8 @@ class Model
         /* 检测是否指定查询字段,如果没有指定,则为*号 */
         $field = $this->sql['field'] ? $this->sql['field'] : '*';
         $table = self::check_join();
-        $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . ' limit 0,1';
+        $order = self::_ordere();
+        $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order . ' limit 0,1';
         $data = $this->query($sql);
         if ($data) {
             $data = $data->fetch(PDO::FETCH_ASSOC);
@@ -207,8 +248,47 @@ class Model
         return $data;
     }
 
+    /**
+     * 查询多条数据
+     **/
+    public function select()
+    {
+        $field = $this->sql['field'] ? $this->sql['field'] : '*';
+        $table = self::check_join();
+        if (empty($this->sql['limit'])) {
+            $limit = '';
+        } else {
+            $limit = ' limit ' . $this->sql['limit'];
+        }
+        $order = self::_ordere();
+        $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order . $limit;
+        $data = $this->query($sql);
+        $data = $data->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
 
+    /***** 以下为修改,添加操作 ******/
+    /**
+     * 添加数据
+     **/
+    public function add($data)
+    {
+        $field = '';
+        $values = '';
+        foreach ($data as $key => $value) {
+            $field .= '`' . $key . '`,';
+            if (is_string($value)) {
+                $values .= '\'' . $value . '\',';
+            } else {
+                $values .= $value . ',';
+            }
+        }
+        $sql = "insert into " . $this->model . " ( " . substr($field, 0, -1) . ") values (" . substr($values, 0, -1) . ")";
+        $this->query($sql);
+        return $this->db->lastInsertId();
+    }
 
+    /** 以下为其他设置 **/
     /**
      * 执行sql
      * @author 普罗米修斯 www.php63.cc
@@ -216,6 +296,15 @@ class Model
     public function query($sql)
     {
         $data = $this->db->query($sql);
+        if (!$data) {
+            try {
+                $error = $this->db->errorInfo();
+                throw new \Exception($error[2]);
+            } catch (Exception $e) {
+                print $e->getMessage($error[2]);
+                die();
+            }
+        }
         self::close();
         return $data;
 
@@ -230,18 +319,19 @@ class Model
         $this->db->close = null;
     }
 
-    /**
-     * 检测是否为join连接
-     * @author 普罗米修斯 www.php63.cc
-     * @return string 返回表名或者join串
-     */
-    protected  function check_join(){
-        if($this->sql['join'] != '' && $this->sql['table'] != ''){
-            $table = $this->sql['table'].' '.$this->sql['join'];
-        }else{
-            $table = $this->model;
-        }
-        return $table;
-    }
 
+    /**
+     * 排序设置
+     * 普罗米修斯 www.php63.cc
+     * @return string $order 如果为空返回空 否则返回排序字符串
+     **/
+    protected function _ordere()
+    {
+        if (empty($this->sql['order'])) {
+            $order = '';
+        } else {
+            $order = ' ORDER BY ' . $this->sql['order'];
+        }
+        return $order;
+    }
 }

@@ -13,22 +13,33 @@ class index_controller extends Controller{
         * join 连接相关说明
         * table join连接的主表格式: table('__test a') 前面以两个_开头固定格式 a为别名
         * join 连接串
+        * select 查询多条数据
+        * limit 分页显示条数设置
+        * order 排序
         **/
         $where = array(
             /* 如果要用in方法查询则使用方法如下*/
             //'id'    => array('in','1,2')
-            'id' => 1
+            'title' => '测试',
+            'desc'  => 'test'
         );
        //查询一条数据(完成)
-        //$data = $obj ->where($where)->find();
+       // $data = $obj ->order('id DESC')->where($where)->find();
 
         //查询一个字段或者多个字段(完成)
        // $datas = $obj->where($where)->getField('title,id',true);
 
         //join 方式查询完成
-         $data = $obj
-             -> table('__test a')
-             -> join('LEFT JOIN __test_one b ON a.id=b.cid')
-             -> getField('b.title,a.desc',true);
+         // $data = $obj
+         //     -> table('__test a')
+         //     -> join('LEFT JOIN __test_one b ON a.id=b.cid')
+         //     -> getField('b.title,a.desc',true);
+        
+        //查询多条数据(完成)
+        //$data = $obj->order('id desc')->limit(0,1)->select();
+        //插入语句插入成功后返回受影响的id
+        
+        $data = $obj -> add($where);
+        dump($data);
     }
 }
