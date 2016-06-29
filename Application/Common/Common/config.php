@@ -15,10 +15,13 @@ return array(
     'DEFAULT_CONTROLLER'  => 'index',                                   // 默认控制器
     'DEFAULT_ARTICLE'     => 'index',                                   // 默认方法
     'DB_TYPE'             => 'pdo',                                     // 数据库类型
-    'DB_HOST'             => 'localhost',                                        // 服务器地址
+    'DB_HOST'             => '182.92.3.236',                                        // 服务器地址
     'DB_NAME'             => 'mvc',                                        // 数据库名
-    'DB_USER'             => 'root',                                        // 用户名
-    'DB_PWD'              => 'qwertyuiop',                                        // 密码
-    'DB_PREFIX'           => 'a_',                                        // 数据库表前缀
-
+    'DB_USER'             => 'seal_scms_user',                                        // 用户名
+    'DB_PWD'              => '@sealyyg2011#.',                                        // 密码
+    'DB_PREFIX'           => 'm_',                                        // 数据库表前缀
+    'DEFAULT_PUBLIC'      => array(
+        'ADMIN' => __ROOT__ . '/Public/Admin/',
+        'HOME'  => __ROOT__ . '/Public/Home/'
+    ),
 );

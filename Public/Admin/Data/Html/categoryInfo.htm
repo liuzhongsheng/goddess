@@ -1,0 +1,53 @@
+<div class="category_info">
+    <ul class="category_tools dib-wrap">
+        <li class="dib">
+            <a id="categoryBtAdd" href="javascript:void(0);" target="popDialog" data-opt="{
+                title: '添加子分类',
+                url: 'Data/Html/categoryAdd.htm',
+                dataType: 'html'
+            }">添 加</a>
+        </li>
+        <li class="dib">
+            <a id="categoryBtDel" href="javascript:void(0);" target="ajaxDel" data-opt="{
+                title: '删除分类',
+                msg: '是否删除该分类？',
+                url: 'Data/Json/Success.php'
+            }">删 除</a>
+        </li>
+    </ul>
+    <form action="" method="post" class="clearfix" onsubmit="return Juuz.ajaxForm(this)">
+        <div class="ui_col_10">
+            <label class="ui_label">规则编号 : </label>
+            <input id="categoryId" class="ui_text_input" readonly="readonly" type="text" name="id" />
+        </div>
+        <div class="ui_col_10">
+            <label class="ui_label">规则名称 : </label>
+            <input id="categoryTitle" class="ui_text_input" type="text" name="title" data-opt='{
+                type : "require",
+                msg : "分类名称不能为空"
+            }' />
+        </div>
+        <div class="ui_col_10">
+            <label class="ui_label">规则路径 : </label>
+            <input class="ui_text_input" type="text" disabled="disabled" name="name" value="Amdin/Quanxian" />
+        </div>
+        <div class="ui_col_10">
+            <div class="ui_text_wrap">
+                <label class="ui_label">模块名称</label>
+                <input class="ui_text_input" type="text" name="mukuai" data-opt='{
+                    type : "require",
+                    msg : "模块名称不能为空"
+                }' value="" />
+            </div>
+        </div>
+        <div class="shuxing"></div>
+        <div class="ui_col_10">
+            <label class="ui_label">规则序号 : </label>
+            <input id="categorySort" class="ui_text_input" type="text" name="sort" />
+            <label class="ui_label">（序号越大，分类越靠前，默认序号 99）</label>
+        </div>
+        <div class="ui_col_10 mt20">
+            <button type="submit" id="categoryBtSave" class="ui_button medium r3">保 存</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,55 @@
+<style>
+    .liuyan_form{
+        padding-bottom:42px;
+    }
+    .ui_pop_foot{
+        background-color:#F4F5F9;border-top:1px solid #ddd;text-align:right;
+        position:absolute;padding:8px 0;bottom:0;left:0;width:100%;
+    }
+</style>
+<script>
+    var successCallback = function(json){
+        Juuz.doByJson(json,function(){
+            Juuz.hidePopBox();
+        });
+    }
+</script>
+<form class="liuyan_form clearfix" action="Data/Json/Success.php" method="post" onsubmit="return Juuz.ajaxForm(this,null,null,successCallback);">
+<div class="ui_col_10" style="padding:10px 20px 20px">
+    <div class="ui_col_10">
+        <label class="ui_label">姓名 : </label>
+        <input class="ui_text_input" type="text" name="name" data-opt='{
+            type : "require",
+            msg : "请输入姓名"
+        }' />
+    </div>
+
+    <div class="ui_col_10">
+        <label class="ui_label">电话 : </label>
+        <input class="ui_text_input" type="text" name="phone" data-opt='{
+            type : "require",
+            msg : "请输入电话"
+        }' />
+    </div>
+
+    <div class="ui_col_10">
+        <label class="ui_label">邮箱 : </label>
+        <input class="ui_text_input" type="text" name="email" data-opt='{
+            type : "email",
+            msg : "邮箱格式错误"
+        }' />
+    </div>
+
+    <div class="ui_col_10">
+        <label class="ui_label">内容</label>
+        <textarea class="ui_textarea" name="content" data-opt='{
+            type : "require",
+            msg : "请输入内容"
+        }'></textarea>
+    </div>
+</div>
+<div class="ui_pop_foot">
+    <button type="submit" class="ui_button small mr10">提 交</button>
+</div>
+
+</form>

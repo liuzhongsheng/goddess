@@ -11,8 +11,30 @@
 namespace Common\Model;
 use Frame\Model;
 class public_model extends Model{
-    public function aa(){
-        $data = array('a','b','c');
+    
+    /**
+     * 编辑添加页面
+     * @author 普罗米修斯 www.php63.cc
+     **/
+    public function edit()
+    {
+        $data = $this->create();
+        if (empty($data)) {
+            return false;
+        }
+        if (empty($data['id'])) {
+            $id = $this->add($data);
+            if (!$id) {
+                $this->error = '添加操作失败';
+                return false;
+            }
+        } else {
+            $res = $this->save($data);
+            if ($res === false) {
+                $this->error = '更新操作失败';
+                return false;
+            }
+        }
         return $data;
     }
 

@@ -10,7 +10,5 @@
 // +----------------------------------------------------------------------
 namespace Admin\Controller;
 class base_controller extends \Common\Controller\private_controller{
-    public function index(){
-        $this -> display();
-    }
+
 }

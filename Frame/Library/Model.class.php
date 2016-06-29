@@ -25,14 +25,18 @@ class Model
     );
     private $model = '';
     private $prefix = '';
-
+//自动验证
+    protected $_auth_check = array();
+    //报错信息
+    protected $error = '';
+    //自动完成
+    protected $_auth_complete = array();
     public function __construct()
     {
 
         $table = explode('\\', get_class($this));
         $this->prefix = load_config('DB_PREFIX');
-        // $this->model = load_config('DB_PREFIX') . substr($table[2], 0, strlen($table[2]) - 6);
-        $this->model = 'a_test';
+        $this->model = load_config('DB_PREFIX') . substr($table[2], 0, strlen($table[2]) - 6);
         $db_host = load_config('DB_HOST');
         $db_name = load_config('DB_NAME');
         $db_user = load_config('DB_USER');
@@ -266,7 +270,22 @@ class Model
         $data = $data->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
-
+    /**
+     * 查询某个字段是否存在与某个表
+     * @author 普修米洛斯 www.php63.cc
+     * @param $model 要查询的表
+     * @param $fields 要查询的字段
+     * @return bool 存在字段返回true
+     */
+    private function _is_fields($model, $fields)
+    {
+        $fields = '`'.$fields.'`';
+        $test = $this->query("Describe {$model} {$fields}")->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($test)) {
+            return false;
+        }
+        return true;
+    }
     /***** 以下为修改,添加操作 ******/
     /**
      * 添加数据
@@ -284,6 +303,7 @@ class Model
             }
         }
         $sql = "insert into " . $this->model . " ( " . substr($field, 0, -1) . ") values (" . substr($values, 0, -1) . ")";
+      
         $this->query($sql);
         return $this->db->lastInsertId();
     }
@@ -334,4 +354,77 @@ class Model
         }
         return $order;
     }
+        /**
+     * @author 普修米洛斯 www.php63.cc
+     * @param string $str
+     * @param int $type 自动检测结构
+     */
+    public function create($str = '$_POST', $type = 1)
+    {
+        if ($str == '$_POST') {
+            $data_post = $_POST;
+        }
+        $data = array();
+        foreach ($data_post as $key => $value) {
+            if (self::_is_fields($this->model, $key)) {
+                $data[$key] = strtolower($value);
+            }
+        }
+        $data__auth_complete = self::input_auth_complete();
+        $data = array_merge($data, $data__auth_complete);
+        $is_result = $this->_auth_check_from($data);
+        if ($is_result === false) {
+            $data = false;
+        }
+        return $data;
+    }
+
+        /**
+     * @author 普修米洛斯 www.php63.cc
+     * @param array $data
+     * @return bool 失败返回false
+     */
+    protected function _auth_check_from($data = array())
+    {
+//        array(字段,验证方法,提示,验证时间)
+        $data_arr = $this->_auth_check;
+        foreach ($data_arr as $key => $value) {
+            foreach ($data as $k => $v) {
+                if (in_array($k, $value)) {
+                    if (is_input_check($value['1'], $v) === false) {
+                        $this->error = $value[2];
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+        /**
+     * @author 普修米洛斯 www.php63.cc
+     * @return array 自动完成组装的数组
+     */
+    protected function input_auth_complete()
+    {
+        $data = $this->_auth_complete;
+        $data_result = array();
+        foreach ($data as $key => $value) {
+            if (self::_is_fields($this->model, $value)) {
+                $data_result[$value[0]] = input_auth_complete($value[1]);
+            }
+
+        }
+        return $data_result;
+    }
+
+    /**
+     * 获取错误信息
+     * @author 普修米洛斯 www.php63.cc
+     * @return string 返回错误信息
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
 }

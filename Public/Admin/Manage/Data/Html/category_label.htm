@@ -1,0 +1,118 @@
+<style type="text/css">
+    .category_label_wrap{
+        font-size:0;border:1px solid #ddd;padding:10px 0 0 10px;
+    }
+    .category_label_wrap a{
+        display:inline-block;vertical-align:top;*display:inline;*zoom:1;border-radius:3px;
+        padding:4px 15px;font-size:12px;color:#999;border:1px solid #ddd;margin:0 10px 10px 0;
+    }
+    .category_label_wrap a.active{
+        background:#076eb8;color:#fff;
+    }
+    .label_add_wrap{
+        padding:0 10px 10px 0;
+    }
+    .label_add_wrap input{
+        width:300px;
+    }
+    .label_add_wrap .btn_add{
+        display:inline-block;vertical-align:top;*display:inline;*zoom:1;
+        margin:0 0 0 10px;padding:0 15px;line-height:25px;
+    }
+</style>
+<div class="ui_col_18">
+    <div class="category_label_wrap">
+        <input type="hidden" id="labelCategoryId" value="4" >
+        <div id="labelCon">
+            <a href="#" id="label11" class="js_label_tap active" data-id="11">蓝色</a>
+            <a href="#" id="label12" class="js_label_tap active" data-id="12">灵魂</a>
+            <a href="#" id="label15" class="js_label_tap" data-id="15">人性</a>
+            <a href="#" id="label13" class="js_label_tap active" data-id="13">女性</a>
+            <a href="#" id="label14" class="js_label_tap active" data-id="14">杂志</a>
+            <a href="#" id="label16" class="js_label_tap" data-id="16">自动化</a>
+            <a href="#" id="label17" class="js_label_tap" data-id="17">生命力</a>
+            <a href="#" id="label18" class="js_label_tap" data-id="18">清风拂来</a>
+            <a href="#" id="label19" class="js_label_tap" data-id="19">月色伊人</a>
+        </div>
+        <div class="label_add_wrap">
+            <input type="text" class="ui_text_input" />
+            <a href="#" class="btn_add js_label_add">增加</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function eventInint(){
+        $('.js_label_tap').each(function(){
+            var $this = $(this);
+            $this.off('click').on('click', function(){
+                var $this = $(this);
+                var id = $this.attr('data-id') || '';
+                var cid = $('#labelCategoryId').val();
+                var text = $this.text();
+                if($this.hasClass('active')){
+                    Juuz.tipsMsg('已添加过该标签，无法再次添加');
+                    return false;
+                }
+                var idsArr = [];
+                var ids = $('#uiCategoryLabel').attr('data-ids')+"";
+                if(ids != ''){
+                    if(ids.indexOf(',') >= 0){
+                        idsArr = ids.split(',');
+                    }else{
+                        idsArr.push(ids);
+                    }
+                }
+                idsArr.push(id+"");
+                ids = idsArr.join(',');
+
+                var strH = "";
+                strH += '<span>';
+                strH += '   '+text+'<a href="#" class="js_label_del"></a>';
+                strH += '   <input type="hidden" name="labelId['+cid+'][]" value="'+id+'" />';
+                strH += '</span>';
+
+                $('#uiCategoryLabel').attr('data-ids', ids).append(strH);
+                $(this).addClass('active');
+                Manage.uiInit('#uiCategoryLabel');
+
+                return false;
+            });
+        });
+    }
+    eventInint();
+
+    $('.js_label_add').off('click').on('click', function(){
+        var $this = $(this);
+        var str = $this.siblings('input').val().trim();
+        var cid = $('#labelCategoryId').val();
+        if(str == ''){
+            Juuz.tipsMsg('请输入标签内容');
+            return false;
+        }
+        var url = "./Data/Json/labelAdd.php";
+        var data = {
+            cid: cid,
+            str: str
+        }
+        Juuz.ajaxGet(url, data, function(json){
+            if(json.statusCode == Juuz.code.ajaxSuccess){
+                if($('#label'+json.id).size() > 0){
+                    Juuz.tipsMsg('已存在该标签');
+                    return false;
+                }
+                Juuz.successMsg(json.message, 1500, function(){
+                    var strH = "";
+                    strH += '<a href="#" id="label'+json.id+'" class="js_label_tap" data-id="'+json.id+'">'+str+'</a>';
+                    $('#labelCon').append(strH);
+                    $this.siblings('input').val('');
+                    eventInint();
+                    Juuz.hideMsg();
+                });
+            }else{
+                Juuz.errorMsg(json.message);
+            }
+        });
+
+        return false;
+    });
+</script>

@@ -164,9 +164,9 @@ class Start
      */
     private function _function()
     {
-        // define_path();
+        define_path();
         // //检测请求类型
-        // is_post_type();
+        is_post_type();
         url_config();
     }
 
@@ -216,7 +216,9 @@ class Start
     }
 
     /** 定义各种常量 **/
-    protected function constant(){
+    protected function constant()
+    {
+        //define_path();
         // $dir = explode('/', $_SERVER['PATH_INFO']);
         // if (count($dir) == 1) {
         //     $model = load_config('DEFAULT_MODUlE');

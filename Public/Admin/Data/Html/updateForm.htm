@@ -1,0 +1,71 @@
+<style>
+    .update_form{
+        height:359px;
+    }
+    .ui_pop_foot{
+        background-color:#F4F5F9;border-top:1px solid #ddd;text-align:right;
+        position:absolute;padding:8px 0;bottom:0;left:0;width:100%;
+    }
+</style>
+<form class="update_form clearfix overflowy" action="" method="post" onsubmit="return Juuz.ajaxForm(this);">
+<div class="ui_col_12" style="padding:10px 20px 20px">
+    <div class="ui_col_12 clearfix">
+        <label class="ui_label">姓名 : </label>
+        <input class="ui_text_input" type="text" name="name" data-opt='{
+            type : "require",
+            msg : "请输入姓名"
+        }' />
+    </div>
+    <div class="ui_col_12 clearfix">
+        <label class="ui_label">电话 : </label>
+        <input class="ui_text_input" type="text" name="phone" data-opt='{
+            type : "require",
+            msg : "请输入电话"
+        }' />
+    </div>
+    <div class="ui_col_12 clearfix">
+        <label class="ui_label">邮箱 : </label>
+        <input class="ui_text_input" type="text" name="email" data-opt='{
+            type : "require",
+            msg : "请输入邮箱"
+        }' />
+    </div>
+    <div class="ui_col_12 clearfix">
+        <label class="ui_label">原密码 : </label>
+        <input class="ui_text_input" type="password" name="oldPwd" data-opt='{
+            type : "require",
+            msg : "请输入原密码"
+        }' />
+    </div>
+    <div class="ui_col_12">
+        <label class="ui_label">新密码 : </label>
+        <input class="ui_text_input" type="password" id="newPwd" name="newPwd" data-opt='{
+            type : "require",
+            msg : "请输入新密码"
+        }' />
+    </div>
+    <div class="ui_col_12">
+        <label class="ui_label">重复新密码 : </label>
+        <input class="ui_text_input" type="password" name="repNewPwd" data-opt='{
+            type : "repeat",
+            rel : "newPwd",
+            msg : "2次密码输入不一致"
+        }' />
+    </div>
+    <div class="ui_col_12">
+        <label class="ui_label">弹出框获取百度地图经纬度</label>
+        <div class="js_map_warp" data-opt='{
+            type: "dialog",
+            lng: "116.403891",
+            lat: "39.915129",
+            width: "600",
+            height: "300",
+            lookupGroup: "mapDialogInput"
+        }'></div>
+    </div>
+</div>
+<div class="ui_pop_foot">
+    <button type="submit" class="ui_button small mr10">保 存</button>
+</div>
+
+</form>

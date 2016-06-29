@@ -29,10 +29,12 @@ class Controller{
             }
             $url = APP_PATH . ucfirst(strtolower($dir['1'])) . '/View/' . ucfirst(strtolower($dir['2'])) . '/' . strtolower($dir['3']) . '.php';
         } else {
+
             $dirName = explode('@', $file);
             $isDir = count($dirName);
             if ($isDir == 2) {
-                $url = APP_PATH . ucfirst(strtolower($dir['1'])) . '/View/' . ucfirst(strtolower($dirName['0'])) . '/' . strtolower($dirName['1']);
+                 $url = $dirName[0].$dirName[1].'.php';
+                //$url = APP_PATH . ucfirst(strtolower($dir['1'])) . '/View/' . ucfirst(strtolower($dirName['0'])) . '/' . strtolower($dirName['1']);
             } else {
                 $url = APP_PATH . ucfirst(strtolower($dir['1'])) . '/View/' . ucfirst(strtolower($dir['2'])) . '/' . $file;
             }
@@ -62,7 +64,7 @@ class Controller{
      * @param $message
      * @param string 返回json数据
      */
-    protected function ajax_success($message, $url = '')
+    protected function ajaxSuccess($message, $url = '')
     {
         $array = array(
             'statusCode' => 200,
@@ -71,7 +73,7 @@ class Controller{
         );
         die(json_encode($array));
     }
-    protected function ajax_error($message, $url=''){
+    protected function ajaxError($message, $url=''){
         $array = array(
             'statusCode' => 300,
             'message'    => $message,

@@ -1,0 +1,116 @@
+<style>
+    .ui_checkbox{
+        margin:0 30px 10px 0;
+    }
+</style>
+<script type="text/javascript">
+    function searchSuccess(json){
+        if(json.statusCode == Juuz.code.ajaxSuccess){
+            var resultCon = "";
+            var resultArr = json.res;
+            for(var i = 0; i < resultArr.length; i++){
+                resultCon += '<label class="ui_checkbox">';
+                resultCon += '  <input type="checkbox" value="'+resultArr[i].id+'" data-text="'+resultArr[i].name+'" name="popCheckbox" />'+resultArr[i].name;
+                resultCon += '</label>'
+            }
+            $('#searchResultCon').html(resultCon);
+            Manage.uiInit('#searchResultCon');
+            Juuz.hideMsg();
+        }else{
+            Juuz.tipsMsg(json.message);
+        }
+    }
+</script>
+<div class="ui_col_12 overflowy" style="height:200px;padding:10px 20px 20px;">
+    <form class="ui_col_12 clearfix" action="Data/Json/findSearchBack.php" method="post" onsubmit="return Juuz.ajaxForm(this, null, null, searchSuccess);">
+        <div class="ui_col_10">
+            <input type="text" class="ui_text_input" name="searchStr" placeHolder="" />
+        </div>
+        <div class="ui_col_2 tc">
+            <button type="submit" class="ui_button small">搜 索</button>
+        </div>
+    </form>
+    <div id="searchResultCon" class="ui_col_12 pt20">
+        <label class="ui_checkbox">
+            <input type="checkbox" value="1" data-text="艾小兵" name="popCheckbox" />艾小兵
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="2" data-text="周孟佳" name="popCheckbox" />周孟佳
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="3" data-text="唐建超" name="popCheckbox" />唐建超
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="4" data-text="刘中胜" name="popCheckbox" />刘中胜
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="5" data-text="李长城" name="popCheckbox" />李长城
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="6" data-text="王丹岚" name="popCheckbox" />王丹岚
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="7" data-text="高溪" name="popCheckbox" />高溪
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="8" data-text="李胜" name="popCheckbox" />李胜
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="9" data-text="乌云龙" name="popCheckbox" />乌云龙
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="1" data-text="艾小兵" name="popCheckbox" />艾小兵
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="2" data-text="周孟佳" name="popCheckbox" />周孟佳
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="3" data-text="唐建超" name="popCheckbox" />唐建超
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="4" data-text="刘中胜" name="popCheckbox" />刘中胜
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="5" data-text="李长城" name="popCheckbox" />李长城
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="6" data-text="王丹岚" name="popCheckbox" />王丹岚
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="7" data-text="高溪" name="popCheckbox" />高溪
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="8" data-text="李胜" name="popCheckbox" />李胜
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="9" data-text="乌云龙" name="popCheckbox" />乌云龙
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="1" data-text="艾小兵" name="popCheckbox" />艾小兵
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="2" data-text="周孟佳" name="popCheckbox" />周孟佳
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="3" data-text="唐建超" name="popCheckbox" />唐建超
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="4" data-text="刘中胜" name="popCheckbox" />刘中胜
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="5" data-text="李长城" name="popCheckbox" />李长城
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="6" data-text="王丹岚" name="popCheckbox" />王丹岚
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="7" data-text="高溪" name="popCheckbox" />高溪
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="8" data-text="李胜" name="popCheckbox" />李胜
+        </label>
+        <label class="ui_checkbox">
+            <input type="checkbox" value="9" data-text="乌云龙" name="popCheckbox" />乌云龙
+        </label>
+    </div>
+</div>

@@ -1,0 +1,148 @@
+<style>
+    .zhubanfang_form{
+        padding-bottom:42px;
+    }
+    .ui_pop_foot{
+        background-color:#F4F5F9;border-top:1px solid #ddd;text-align:right;
+        position:absolute;padding:8px 0;bottom:0;left:0;width:100%;
+    }
+    .search_wrap{
+        position:relative;
+    }
+    .search_wrap input{
+        position:relative;z-index:100;
+    }
+    .search_list{
+        position:absolute;top:26px;left:0;width:388px;border:1px solid #9dd0ff;border-top:0;
+        z-index:90;background:#fff;
+    }
+    .search_list li{
+        border-top:1px solid #ddd;
+    }
+    .search_list li a{
+        display:block;line-height:26px;color:#999;padding:0 10px;font-size:12px;
+    }
+    .search_list li a:hover{
+        background:#eee;color:#333;
+    }
+    .headimg_preview{
+        width:200px;height:240px;position:absolute;left:0;top:38px;z-index:50;background:#fff;
+        display:none;
+    }
+    .headimg_preview img{
+        width:100%;vertical-align:top;
+    }
+</style>
+<form class="zhubanfang_form clearfix" action="./Data/Json/zhubanfangAdd.php" method="post" onsubmit="return Juuz.ajaxForm(this,null,null,zhubanSuccess);">
+<div class="ui_col_15" style="padding:10px 20px 20px">
+    <input type="hidden" id="zhubanfangId" />
+    <div class="ui_col_10">
+        <label class="ui_label">姓名 : </label>
+        <div class="search_wrap">
+            <input id="nameInput" class="ui_text_input" type="text" name="name" data-opt='{
+                type : "require",
+                msg : "请填写姓名"
+            }' />
+            <ul id="searchList" class="search_list"></ul>
+        </div>
+        <label class="ui_label">介绍 : </label>
+        <textarea style="height:162px;" class="ui_textarea" id="descTextarea" name="jieshao" data-opt='{
+            type : "require",
+            msg : "请填写价绍"
+        }'></textarea>
+    </div>
+    <div class="ui_col_5" style="position:relative;">
+        <label class="ui_label">头像 : </label>
+        <input data-opt='{
+            fileType: "img",
+            width: "200,300",
+            height: "200,300",
+            name: "头像上传",
+            title: "缩略图",
+            thumb: ""
+        }' type="hidden" class="js_hidden_file" name="headImg" value="" />
+        <div class="headimg_preview"></div>
+    </div>
+</div>
+<div class="ui_pop_foot">
+    <button type="button" class="ui_button small mr10" onclick="clearData();">清 空</button>
+    <button type="submit" class="ui_button small mr10">保 存</button>
+</div>
+
+<script type="text/javascript">
+    var data = [];
+
+    function searchClick(i){
+        var _data = data[i];
+        $('#zhubanfangId').val(_data.id);
+        $('#nameInput').val(_data.name).prop('disabled',true).addClass('disabled');
+        $('#descTextarea').val(_data.desc).prop('disabled',true).addClass('disabled');
+        $('.headimg_preview').html('<img src="'+_data.headimg+'" />').show();
+    }
+
+    $('#nameInput').on('keyup', function(){
+        var $this = $(this);
+        var str = $this.val().trim();
+        var url = "./Data/Json/searchList.php";
+        var _data = {
+            str : str
+        }
+        Juuz.ajaxGet(url,_data,function(json){
+            if(json.statusCode == Juuz.code.ajaxSuccess){
+                data = json.res;
+                var searchHtml = "";
+                for(i in data){
+                    searchHtml += '<li>';
+                    searchHtml += '<a href="javascript:void(0);" onclick="searchClick('+i+')">'+data[i]['name']+'</a>';
+                    searchHtml += '</li>';
+                }
+                $('#searchList').html(searchHtml);
+            }
+        }, Juuz.noop);
+    }).on('blur', function(){
+        setTimeout(function(){
+            $('#searchList').html('');
+        },100);
+    });
+
+    function clearData(){
+        $('#zhubanfangId').val('');
+        $('#nameInput').val('').prop('disabled',false).removeClass('disabled');
+        $('#descTextarea').val('').prop('disabled',false).removeClass('disabled');
+        $('.headimg_preview').html('').hide();
+    }
+
+    function zhubanSuccess(json){
+        Juuz.tipsMsg(json.message);
+        if(json.statusCode == Juuz.code.ajaxSuccess){
+            var idsArr = [];
+            var ids = $('#uiSelectVal').attr('data-ids')+"";
+            if(ids != ''){
+                if(ids.indexOf(',') >= 0){
+                    idsArr = ids.split(',');
+                }else{
+                    idsArr.push(ids);
+                }
+            }
+            for(i in idsArr){
+                if(idsArr[i] == json.id){
+                    Juuz.tipsMsg("已选择了，不能再次选择！");
+                    return;
+                }
+            }
+            idsArr.push(json.id+"");
+            ids = idsArr.join(',');
+            $('#uiSelectVal').attr('data-ids', ids);
+            var strH = "";
+            strH += '<span>';
+            strH += '  '+json.name+'<a href="#" class="js_label_del"></a>';
+            strH += '  <input type="hidden" name="ids[]" value="'+json.id+'" />';
+            strH += '</span>';
+            $('#uiSelectVal').append(strH);
+            Manage.uiInit('#uiSelectVal');
+            $('.ui-dialog-close').trigger('click');
+        }
+    }
+</script>
+
+</form>
