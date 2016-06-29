@@ -8,9 +8,12 @@
 // +----------------------------------------------------------------------
 // | Author: 普罗米修斯 <996674366@qq.com>
 // +----------------------------------------------------------------------
-namespace Admin\Controller;
-class base_controller extends \Common\Controller\private_controller{
-    public function index(){
-        $this -> display();
+namespace Common\Model;
+use Frame\Model;
+class public_model extends Model{
+    public function aa(){
+        $data = array('a','b','c');
+        return $data;
     }
+
 }

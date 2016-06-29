@@ -46,3 +46,31 @@ function dump($data){
     echo '<pre>';
     print_r($data);
 }
+
+/**
+ * 引入model
+ **/
+function model($table_name){
+    $dir = explode('/', $_SERVER['PATH_INFO']);
+    if(count($dir) > 1){
+        $model_dir = $dir['1'];
+    }else{
+        $model_dir = load_config(DEFAULT_MODUlE);
+    }
+    $table_name = strtolower($table_name);
+    $url = APP_PATH.$model_dir.'/Model/'.$table_name.'_model'. CLASS_SUFFIX;
+    if (!file_exists($url)) {
+        exit($url . '模型不存在');
+    }
+    $table_name = $model_dir.'\\Model\\'.$table_name.'_model';
+    return new $table_name;
+    
+}
+
+
+
+
+
+
+
+

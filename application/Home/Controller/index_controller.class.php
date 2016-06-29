@@ -1,11 +1,14 @@
 <?php
 namespace Home\Controller;
 use Frame\Controller;
-use Frame\Model;
+// use Frame\Model;
 
 class index_controller extends Controller{
     public function index(){
-       $obj = new Model();
+        $model = model('test');
+        $this -> assign('info',12);
+        $this -> display();
+       //$obj = new Model();
        /**
         * where 查询条件,只能接受数组
         * find 查询一条数据
@@ -17,12 +20,12 @@ class index_controller extends Controller{
         * limit 分页显示条数设置
         * order 排序
         **/
-        $where = array(
+       // $where = array(
             /* 如果要用in方法查询则使用方法如下*/
             //'id'    => array('in','1,2')
-            'title' => '测试',
-            'desc'  => 'test'
-        );
+        //     'title' => '测试',
+        //     'desc'  => 'test'
+        // );
        //查询一条数据(完成)
        // $data = $obj ->order('id DESC')->where($where)->find();
 
@@ -39,7 +42,7 @@ class index_controller extends Controller{
         //$data = $obj->order('id desc')->limit(0,1)->select();
         //插入语句插入成功后返回受影响的id
         
-        $data = $obj -> add($where);
-        dump($data);
+        // $data = $obj -> add($where);
+        // dump($data);
     }
 }

@@ -24,10 +24,11 @@ class Start
         $this->_function();
         /* 自动加载 */
         spl_autoload_register(array($this, 'autoload'));
-              // 设定错误和异常处理
+        // 设定错误和异常处理
         register_shutdown_function(array($this, 'fatalError'));
         set_error_handler(array($this, 'appError'));
         set_exception_handler(array($this, 'appException'));
+        self::constant();
         //加载路由配置
         $this->parse();
 
@@ -79,9 +80,9 @@ class Start
             //     if($dir[0].'\\'.$dir[1]){
             //         $url =  APP_PATH.implode('/',$dir).CLASS_SUFFIX;
             //     }
-        }else{
-            if($dir[0].'\\'.$dir[1]){
-                $url =  APP_PATH.implode('/',$dir).CLASS_SUFFIX;
+        } else {
+            if ($dir[0] . '\\' . $dir[1]) {
+                $url = APP_PATH . implode('/', $dir) . CLASS_SUFFIX;
             }
         }
         if (file_exists($url)) {
@@ -103,23 +104,25 @@ class Start
         $obj = new $name;
         $obj->$file_name();
     }
+
     /**
      * 自定义异常处理
      * @access public
      * @param mixed $e 异常对象
      */
-    static public function appException($e) {
+    static public function appException($e)
+    {
         $error = array();
-        $error['message']   =   $e->getMessage();
-        $trace              =   $e->getTrace();
-        if('E'==$trace[0]['function']) {
-            $error['file']  =   $trace[0]['class'];
-            $error['line']  =   $trace[0]['line'];
-        }else{
-            $error['file']  =   $e->getFile();
-            $error['line']  =   $e->getLine();
+        $error['message'] = $e->getMessage();
+        $trace = $e->getTrace();
+        if ('E' == $trace[0]['function']) {
+            $error['file'] = $trace[0]['class'];
+            $error['line'] = $trace[0]['line'];
+        } else {
+            $error['file'] = $e->getFile();
+            $error['line'] = $e->getLine();
         }
-        $error['trace']     =   $e->getTraceAsString();
+        $error['trace'] = $e->getTraceAsString();
         // 发送404信息
         header('HTTP/1.1 404 Not Found');
         header('Status:404 Not Found');
@@ -136,21 +139,22 @@ class Start
      * @param int $errline 错误行数
      * @return void
      */
-    static public function appError($errno, $errstr, $errfile, $errline) {
-      switch ($errno) {
-          case E_ERROR:
-          case E_PARSE:
-          case E_CORE_ERROR:
-          case E_COMPILE_ERROR:
-          case E_USER_ERROR:
-            ob_end_clean();
-            $errorStr = "$errstr ".$errfile." 第 $errline 行.";
-            self::halt($errorStr);
-            break;
-          default:
- 
-            break;
-      }
+    static public function appError($errno, $errstr, $errfile, $errline)
+    {
+        switch ($errno) {
+            case E_ERROR:
+            case E_PARSE:
+            case E_CORE_ERROR:
+            case E_COMPILE_ERROR:
+            case E_USER_ERROR:
+                ob_end_clean();
+                $errorStr = "$errstr " . $errfile . " 第 $errline 行.";
+                self::halt($errorStr);
+                break;
+            default:
+
+                break;
+        }
     }
 
 
@@ -165,13 +169,15 @@ class Start
         // is_post_type();
         url_config();
     }
+
     /**
      * 捕获致命错误
      * @author 普修米洛斯 www.php63.cc
      */
-    static public function fatalError(){
+    static public function fatalError()
+    {
         if ($e = error_get_last()) {
-            switch($e['type']){
+            switch ($e['type']) {
                 case E_ERROR:
                 case E_PARSE:
                 case E_CORE_ERROR:
@@ -184,12 +190,14 @@ class Start
             }
         }
     }
+
     /**
      * 错误输出
      **/
-    static public function halt($error){
+    static public function halt($error)
+    {
 
-        if(!is_array($error)){
+        if (!is_array($error)) {
             $trace = debug_backtrace();
             #错误文件
             $e['file'] = $trace[0]['class'];
@@ -199,11 +207,20 @@ class Start
             $e['message'] = '操作错误';
             ob_start();
             debug_print_backtrace();
-            $e['trace']     = ob_get_clean();
-        }else{
-             $e              = $error;
+            $e['trace'] = ob_get_clean();
+        } else {
+            $e = $error;
         }
-        include SYSTEM_PATH.'tpl/error.php';
+        include SYSTEM_PATH . 'tpl/error.php';
         exit;
+    }
+
+    /** 定义各种常量 **/
+    protected function constant(){
+        // $dir = explode('/', $_SERVER['PATH_INFO']);
+        // if (count($dir) == 1) {
+        //     $model = load_config('DEFAULT_MODUlE');
+        //     $controller = load_config('DEFAULT_CONTROLLER');
+        // }
     }
 }
