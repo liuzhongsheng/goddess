@@ -81,4 +81,32 @@ class Controller{
         );
         die(json_encode($array));
     }
+
+        /**
+     * @author 普修米洛斯 www.php63.cc
+     * @param string $msg 提示消息
+     * @param string $url 跳转地址
+     * @return bool 成功返回true 失败返回提示消息
+     */
+    protected function check_token($msg = '请不要重复提交', $url = ''){
+        $token = I('post','_token','');
+        if($token !== $_SESSION['_token']){
+            $this -> ajax_error('请不要重复提交');
+        }
+        return true;
+    }
+
+    /**
+     * Action跳转(URL重定向） 支持指定模块和延时跳转
+     * @access protected
+     * @param string $url 跳转的URL表达式
+     * @param array $params 其它URL参数
+     * @param integer $delay 延时跳转的时间 单位为秒
+     * @param string $msg 跳转提示信息
+     * @return void
+     */
+    protected function redirect($url,$params=array(),$delay=0,$msg='') {
+        $url    =   Url($url,$params);
+        redirect($url,$delay,$msg);
+    }
 }

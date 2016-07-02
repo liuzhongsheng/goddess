@@ -37,5 +37,24 @@ class public_model extends Model{
         }
         return $data;
     }
+    /**
+     * 查询总数
+     * @param string $where 查询条件
+     * @param string $field 要查询的字段,默认全部
+     * @author 刘中胜
+     * @return int 总数
+     **/
+    public function total($where)
+    {
+        $count = $this -> where($where)->count();
+        return $count;
+    }
 
+    /**
+     * 普通select 查询
+     **/
+    public function _public_select($where,$field,$order = '',$limit = ''){
+        $list = $this -> where($where)->limit($limit)->order($order)->field($field)->select();
+        return $list;
+    }
 }

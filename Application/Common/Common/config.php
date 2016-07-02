@@ -24,4 +24,5 @@ return array(
         'ADMIN' => __ROOT__ . '/Public/Admin/',
         'HOME'  => __ROOT__ . '/Public/Home/'
     ),
+    'PAGENUM'             => 10
 );

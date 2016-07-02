@@ -17,15 +17,7 @@
                 <?php include PUBLIC_HTML.'Public/leftMenu.php'; ?>
             </div>
             <div class="col_main">
-                <div class="main_hd">
-                    <h2>权限管理</h2>
-                    <div class="title_tab">
-                        <ul class="tab_ul dib-wrap">
-                            <li class="dib selected"><a href="auth.php">分组管理</a></li>
-                        </ul>
-                        
-                    </div>
-                </div>
+
                 <div class="main_bd">
                     <div class="main_bd_top clearfix">
                         <ul class="tab_caozuo dib-wrap">
@@ -44,15 +36,17 @@
                                         <th style="width:200px;">分类名称</th>
                                         <th style="width:50px">人数</th>
                                         <th>描述</th>
+                                        <th style="width:50px">排序</th>
                                         <th style="width:150px;">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($list as $key => $value) {?>
                                     <tr class="js_remove">
-                                        <td><span>运营组</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-
+                                        <td><span><?php echo $value['title'];?></span></td>
+                                        <td><?php echo $value['num'];?></td>
+                                        <td><?php echo $value['desc'];?></td>
+                                        <td><?php echo $value['sort'];?></td>
                                         <td>
                                             <a href="#">编辑</a>
                                             <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
@@ -68,139 +62,8 @@
                                             }">权限</a>
                                         </td>
                                     </tr>
-                                    <tr class="js_remove">
-                                        <td><span>美工组</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'Data/Json/Error.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '2',
-                                                name: '美工组',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="js_remove">
-                                        <td><span>超级管理员</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'Data/Json/Success.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '3',
-                                                name: '超级管理员',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="js_remove">
-                                        <td><span>PHP组</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'Data/Json/Success.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '4',
-                                                name: 'PHP组',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="js_remove">
-                                        <td><span>IOS组</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'Data/Json/Success.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '5',
-                                                name: 'IOS组',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="js_remove">
-                                        <td><span>销售组</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'Data/Json/Success.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '6',
-                                                name: '销售组',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="js_remove">
-                                        <td><span>普通会员</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'Data/Json/Success.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '7',
-                                                name: '普通会员',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="js_remove">
-                                        <td><span>超级会员</span></td>
-                                        <td>100</td>
-                                        <td>描述</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="javascript:void(0);" class="js_slide_show_del" target="ajaxDel" data-opt="{
-                                                title: '删除文章',
-                                                msg: '确定要删除该记录吗？',
-                                                url: 'dataHtml/Success.php',
-                                                callback: 'delSuccess'
-                                            }">删除</a>
-                                            <a href="javascript:void(0);" class="jsQuanxian" data-opt="{
-                                                id: '8',
-                                                name: '超级会员',
-                                                url: 'Data/Json/quanxianJson.php'
-                                            }">权限</a>
-                                        </td>
-                                    </tr>
+                                    <?php } ?>
+                                   
                                 </tbody>
                             </table>
                         </div>

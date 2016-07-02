@@ -15,10 +15,9 @@
             <a href="javascript:void(0);" class="account_logout">安全退出</a>
         </div>
         <div class="head_menu">
-            <a href="#" class="selected">PC后台管理</a>
-            <a href="#">微信后台管理</a>
-            <a href="#">IOS后台管理</a>
-            <a href="#">Android后台管理</a>
+            <?php foreach($head_menu as $key => $value){?>
+                <a href="#" class="<?php if($value['module'] == MODULE_NAME){ echo 'selected';}?>"><?php echo $value['title'];?></a>
+            <?php } ?>
         </div>
     </div>
 </div>

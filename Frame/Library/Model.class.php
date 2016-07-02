@@ -127,7 +127,8 @@ class Model
     {
         $this->sql['limit'][0] = $start_num;
         $this->sql['limit'][1] = $page_num;
-        $this->sql['limit'] = implode(',', $this->sql['limit']);
+        $limit = $this->sql['limit'] ? '' : $this->sql['limit'];
+        $this->sql['limit'] = empty($limit) ? '' : $limit;
         return $this;
     }
 
@@ -160,7 +161,7 @@ class Model
     public function getField($field, $type = false)
     {
         $table = self::check_join();
-        $order = self::_ordere();
+        $order = self::_order();
         if ($type) {
             $field_data = explode(',', $field);
             $count = count($field_data);
@@ -243,7 +244,7 @@ class Model
         /* 检测是否指定查询字段,如果没有指定,则为*号 */
         $field = $this->sql['field'] ? $this->sql['field'] : '*';
         $table = self::check_join();
-        $order = self::_ordere();
+        $order = self::_order();
         $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order . ' limit 0,1';
         $data = $this->query($sql);
         if ($data) {
@@ -264,11 +265,25 @@ class Model
         } else {
             $limit = ' limit ' . $this->sql['limit'];
         }
-        $order = self::_ordere();
+        $order = self::_order();
         $sql = 'SELECT ' . $field . ' FROM ' . $table . $this->sql['where'] . $order . $limit;
         $data = $this->query($sql);
         $data = $data->fetchAll(PDO::FETCH_ASSOC);
         return $data;
+    }
+
+    /**
+     * 查询总数
+     * @author 普修米洛斯 www.php63.cc
+     * @param $sql 要查询的sql
+     * @return mixed 返回查询到的数据
+     */
+    public function count()
+    {
+        $sql = 'SELECT count(`id`) FROM '.$this->model .$this->sql['where'];
+        $res = $this->query($sql);
+        $count = $res->fetchColumn();
+        return $count;
     }
     /**
      * 查询某个字段是否存在与某个表
@@ -345,7 +360,7 @@ class Model
      * 普罗米修斯 www.php63.cc
      * @return string $order 如果为空返回空 否则返回排序字符串
      **/
-    protected function _ordere()
+    protected function _order()
     {
         if (empty($this->sql['order'])) {
             $order = '';

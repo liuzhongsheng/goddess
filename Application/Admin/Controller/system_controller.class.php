@@ -14,6 +14,7 @@ class system_controller extends base_controller{
      * 系统分组列表
      **/
     public function group_list(){
+        $this->model = model('system_group');
         $but = array(
             array(
                 'url'   => 'group_edit',
@@ -23,6 +24,13 @@ class system_controller extends base_controller{
             ),
         );
         self::_button($but);
+        //计算总数
+        self::_public_count();
+        $where = array(
+            'status' => 1
+        );
+        $list = $this->model->_public_select($where, '*','sort DESC');
+        $this->assign('list', $list);
         $this -> display();
     }
 
@@ -31,24 +39,51 @@ class system_controller extends base_controller{
      * @author
      **/
     public function group_edit(){
-        $model = model('system_group');
+        $this -> model = model('system_group');
         if(IS_POST){
-            $data  = $model -> edit();
-            if($data){
-                $this -> ajaxSuccess($data['id'] ? '更新成功' : '添加成功', Url('group_list'));
-            }else{
-                $this -> ajaxError($model -> getError());
-            }
+            self::_public_add('group_list');
         }
+        //创建token
+        create_token();
         $id = I('get','id',0,'intval');
         if($id != 0){
             $where = array(
                 'status' => 1,
                 'id'     => $id
             );
-            $info = $model -> where($where)->find();
-            $this -> assign('info',$info);
+            self::_public_find($where);
         }
+        $this->display();
+    }
+
+    /** 权限规则列表 */
+    public function rules()
+    {
+        self::_public_list('system_rules','权限管理', $sort='sort DESC');
+        $this -> display();
+    }
+
+    /** 权限规则详情 **/
+    public function rules_info(){
+        $this->model = model('system_rules');
+        $id = I('get','id', 0, 'intval');
+        if($id != 0){
+            $where = array(
+                'id'    => $id,
+                'statu' => 1
+            );
+            $info = self::_public_find($where, 2);
+        }else{
+            $info['id'] = 0;
+        }
+
+        if(self::_check_rule('authedit') && $info['level'] != 2){
+             $info['butadd'] = self::_catebut('authedit', '添加权限', $info['id']);
+        }
+        if(self::_check_rule('authdel')){
+            $info['butdel'] = self::_catebut('authdel', '删除权限', $info['id'], '您确认要删除该权限吗?', 2);
+        }
+        $this->assign('info', $info);
         $this->display();
     }
 }

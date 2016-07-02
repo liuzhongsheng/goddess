@@ -7,6 +7,7 @@
 <form class="clearfix" action="<?php echo Url('group_edit');?>" method="post" onsubmit="return Juuz.ajaxForm(this);">
     <div class="ui_col_8" style="padding:10px 20px 62px">
         <input type="hidden" name="id" value="<?php echo $info['id'];?>">
+        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'];?>"/>
         <div class="ui_col_8">
             <label class="ui_label">分组名称 : </label>
             <input class="ui_text_input" type="text" name="title" value="<?php echo $info['title'];?>" data-opt='{

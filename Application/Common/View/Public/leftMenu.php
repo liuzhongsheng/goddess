@@ -20,27 +20,11 @@
         <dt class="menu_title">
             <i class="icon_menu"><img src="<?php echo ADMIN ?>Images/icon_menu_management.png"/></i>内容管理
         </dt>
-        <?php
-            $arr = array(
-                array("url" => "layout", "name" => "页面布局"),
-                array("url" => "category", "name" => "分类管理"),
-                array("url" => "goods_attr", "name" => "商品属性管理"),
-                array("url" => "auth", "name" => "权限管理"),
-                array("url" => "list", "name" => "列表管理"),
-                array("url" => "tongdaoEdit", "name" => "内容编辑管理"),
-                array("url" => "imageUpload", "name" => "图片上传管理"),
-                array("url" => "map", "name" => "地图管理"),
-                array("url" => "chart_bar", "name" => "图表插件"),
-                array("url" => "zujian", "name" => "组件管理"),
-            );
-            foreach($arr as $key => $val){
-        ?>
-            <dd class="menu_item <?php if(defined("SELECT_MENU") && SELECT_MENU == $val['url']){echo 'active'; } ?>">
-                <a href="<?php echo $val['url'] ?>.php"><?php echo $val['name']; ?></a>
+        <?php foreach($left_menu as $key => $value){?>
+            <dd class="menu_item <?php if($value['content'] == CONTROLLER_NAME){ echo 'active';}?>">
+                <a href="<?php echo $value['url'] ?>.php"><?php echo $value['title']; ?></a>
             </dd>
-        <?php
-            }
-        ?>
+        <?php }?>
     </dl>
 </div>
 <div class="menu_bottom">

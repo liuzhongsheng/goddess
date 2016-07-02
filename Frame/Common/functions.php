@@ -28,17 +28,7 @@ function load_config($name)
     return $GLOBALS[$name] ? $GLOBALS[$name] : '';
 }
 
-/**
- * 设置url默认配置
- **/
-function url_config(){
-    $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
-    $url = ltrim($url,'/');
-    $path_info = !empty($url) ? explode('/', $url) : array(load_config('DEFAULT_MODUlE'), load_config('DEFAULT_CONTROLLER'), load_config('DEFAULT_ARTICLE'));
-    defined('MODULE_NAME') or define('MODULE_NAME',$path_info[0]);
-    defined('CONTROLLER_NAME') or define('CONTROLLER_NAME',$path_info[1]);
-    defined('ARTICLE_NAME') or define('ARTICLE_NAME',$path_info[2]);
-}
+
 /**
  * 自定义打印方法原样输出
  **/
@@ -181,6 +171,121 @@ function is_input_check($str = '', $value)
     }
     return true;
 
+}
+/**
+ * @param string $type 过滤类型 post,get
+ * @param string $str 要过滤的字段
+ * @param string $default 默认值
+ * @param string $filter 默认过滤方式
+ * @return string 返回处理好的数据
+ */
+function I($type='post',$str='',$default='', $filter='htmlspecialchars'){
+    switch (strtolower($type)) {
+        case 'post':
+            $str = isset($_POST[$str]) ? $_POST[$str] : $default;
+            break;
+        case 'get':
+            $str = isset($_GET[$str]) ? $_GET[$str] : $default;
+            break;
+        default:
+            # code...
+            break;
+    }
+    $str = call_user_func($filter,$str);
+    return addslashes($str);
+}
+
+/**
+ * 开启token
+ * @author 普修米洛斯 www.php63.cc
+ * @return string token
+ */
+function create_token(){
+    $obj = new \Frame\Lib\Token();
+    return $obj->token();
+}
+
+/**
+ * @author 普修米洛斯 www.php63.cc
+ * @return mixed 删除token
+ */
+function del_token(){
+    $obj = new \Frame\Lib\Token();
+    return $obj->_del_token();
+}
+
+function url_config(){
+    $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+    $url = ltrim($url,'/');
+    $path_info = !empty($url) ? explode('/', $url) : array(load_config('DEFAULT_MODUlE'), load_config('DEFAULT_CONTROLLER'), load_config('DEFAULT_ARTICLE'));
+    defined('MODULE_NAME') or define('MODULE_NAME',$path_info[0]);
+    defined('CONTROLLER_NAME') or define('CONTROLLER_NAME',$path_info[1]);
+    defined('ARTICLE_NAME') or define('ARTICLE_NAME',$path_info[2]);
+}
+
+/**
+ * URL重定向
+ * @param string $url 重定向的URL地址
+ * @param integer $time 重定向的等待时间（秒）
+ * @param string $msg 重定向前的提示信息
+ * @return void
+ */
+function redirect($url, $time=0, $msg='') {
+    //多行URL地址支持
+    $url        = str_replace(array("\n", "\r"), '', $url);
+    if (empty($msg))
+        $msg    = "系统将在{$time}秒之后自动跳转到{$url}！";
+    if (!headers_sent()) {
+        // redirect
+        if (0 === $time) {
+            header('Location: ' . $url);
+        } else {
+            header("refresh:{$time};url={$url}");
+            echo($msg);
+        }
+        exit();
+    } else {
+        $str    = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
+        if ($time != 0)
+            $str .= $msg;
+        exit($str);
+    }
+}
+
+/**
+ * @author 普修米洛斯 www.php63.cc
+ * @param $file 缓存文件名
+ * @param int $time 缓存时间
+ */
+function check_cache($file, $time = 0){
+    if($time == 0){
+        $time = load_config('CACHE_TIME');
+    }
+    if (is_file($file) && (time() - filemtime($file)) < $time) {
+        require_once $file;
+        exit;
+    }
+}
+
+/**
+ * @author 普修米洛斯 www.php63.cc
+ * @param $file 生成静态页面
+ */
+function create_cache($file){
+    file_put_contents($file,ob_get_contents());
+}
+
+/**
+ * 将对象转为数组
+ **/
+function objectToArray($e){
+    $e=(array)$e;
+    foreach($e as $k=>$v){
+        if( gettype($v)=='resource' ) return;
+        if( gettype($v)=='object' || gettype($v)=='array' )
+            $e[$k]=(array)objectToArray($v);
+    }
+    return $e;
 }
 
 
