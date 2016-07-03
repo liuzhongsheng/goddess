@@ -17,14 +17,7 @@
                 <?php include PUBLIC_HTML.'Public/leftMenu.php'; ?>
             </div>
             <div class="col_main">
-                <div class="main_hd">
-                    <h2>列表管理</h2>
-                    <div class="title_tab">
-                        <ul class="tab_ul dib-wrap">
-                            <li class="dib selected"><a href="list.php">普通列表</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <?php include PUBLIC_HTML.'Public/main_head.php';?>
                 <div class="main_bd">
                     <div class="main_bd_top clearfix">
                         <div class="search_condition">

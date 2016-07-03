@@ -17,7 +17,7 @@
                 <?php include PUBLIC_HTML.'Public/leftMenu.php'; ?>
             </div>
             <div class="col_main">
-
+                <?php include PUBLIC_HTML.'Public/main_head.php';?>
                 <div class="main_bd">
                     <div class="main_bd_top clearfix">
                         <ul class="tab_caozuo dib-wrap">
@@ -28,6 +28,7 @@
                             <?php }?>
                         </ul>
                     </div>
+
                     <div class="quanxian_wrap clearfix">
                         <div class="quanxian_list ui_col_18">
                             <table>

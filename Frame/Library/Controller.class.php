@@ -91,7 +91,7 @@ class Controller{
     protected function check_token($msg = '请不要重复提交', $url = ''){
         $token = I('post','_token','');
         if($token !== $_SESSION['_token']){
-            $this -> ajax_error('请不要重复提交');
+            $this -> ajaxError('请不要重复提交');
         }
         return true;
     }

@@ -317,12 +317,42 @@ class Model
                 $values .= $value . ',';
             }
         }
-        $sql = "insert into " . $this->model . " ( " . substr($field, 0, -1) . ") values (" . substr($values, 0, -1) . ")";
+        $sql = "insert into " . $this->model . " ( " . rtrim($field, ',') . ") values (" . rtrim($values, ',') . ")";
       
         $this->query($sql);
         return $this->db->lastInsertId();
     }
 
+    /**
+     * 修改一个字段
+     * @param $field string 要修改的字段
+     * @param $value string 值
+     **/
+    public function setField($field, $value){
+        $fields = '`'.$field.'`';
+        $sql = "update " . $this->model . " set {$fields}='{$value}'". $this->sql['where'];
+        $res = $this->exec($sql);
+        return $res;
+    }
+
+    /**
+     * 更新
+     **/
+    public function save($data){
+        $save_data = '';
+        foreach ($data as $key => $value) {
+                if(!is_numeric($value)){
+                    $value = '\'' . $value . '\'';
+                }else{
+                    $value = $value;
+                }
+                $save_data .= '`' . $key . '`='.$value.',';
+        }
+        $data = rtrim($save_data,',');
+        $sql = "update " . $this->model . " set {$data}". $this->sql['where'];
+        $res = $this->exec($sql);
+       return $res;
+    }
     /** 以下为其他设置 **/
     /**
      * 执行sql
@@ -344,6 +374,28 @@ class Model
         return $data;
 
     }
+
+        /**
+     * @author 普修米洛斯 www.php63.cc
+     * @param $sql 要执行的sql
+     */
+    public function exec($sql)
+    {
+        $data = $this->db->exec($sql);
+        if (!$data) {
+            try {
+                $error = $this->db->errorInfo();
+                throw new \Exception($error[2]);
+            } catch (Exception $e) {
+                print $e->getMessage($error[2]);
+                die();
+            }
+        }
+        self::close();
+        return $data;
+    }
+
+
 
     /**
      * 关闭数据库连接
@@ -382,7 +434,8 @@ class Model
         $data = array();
         foreach ($data_post as $key => $value) {
             if (self::_is_fields($this->model, $key)) {
-                $data[$key] = strtolower($value);
+                    $data[$key] = $value;
+                
             }
         }
         $data__auth_complete = self::input_auth_complete();

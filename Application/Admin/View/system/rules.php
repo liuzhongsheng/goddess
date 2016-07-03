@@ -17,24 +17,7 @@
             <?php include PUBLIC_HTML.'Public/leftMenu.php'; ?>
         </div>
         <div class="col_main">
-            <div class="main_hd">
-                <h2>文章管理</h2>
-                <div class="title_tab">
-                    <ul class="tab_ul dib-wrap">
-                        <li class="dib"><a href="category.php">普通分类</a></li>
-                        <li class="dib selected"><a href="category_quanxian.php">权限分类（ajax请求）</a></li>
-                        <li class="dib"><a href="category_weixin.php">微信菜单</a></li>
-                    </ul>
-                    <div class="tab_navs">
-                        <div class="search_box">
-                            <form action="" method="post">
-                                <input type="text" name="searchText" />
-                                <button type="submit" class="btn_search_submit"></button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php include PUBLIC_HTML.'Public/main_head.php';?>
             <div class="main_bd">
                 <div class="category_wrap clearfix">
                     <div class="category_left">

@@ -13,7 +13,6 @@ session_start();
 
 //定义类文件后缀
 const  CLASS_SUFFIX = '.class.php';
-
 //检测是否http协议类型
 if ($_SERVER['HTTPS'] != 'on') {
     $http_type = 'http';

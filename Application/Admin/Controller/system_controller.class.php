@@ -67,23 +67,49 @@ class system_controller extends base_controller{
     public function rules_info(){
         $this->model = model('system_rules');
         $id = I('get','id', 0, 'intval');
+        //创建token
+        create_token();
         if($id != 0){
             $where = array(
                 'id'    => $id,
-                'statu' => 1
+                'status' => 1
             );
-            $info = self::_public_find($where, 2);
+            $info = self::_public_find($where, 1);
         }else{
             $info['id'] = 0;
         }
 
-        if(self::_check_rule('authedit') && $info['level'] != 2){
-             $info['butadd'] = self::_catebut('authedit', '添加权限', $info['id']);
+        if(self::_check_rule('auth_edit') && $info['level'] != 2){
+            $info['butadd'] = self::_public_cate_but('auth_edit', '添加权限', $info['id']);
         }
         if(self::_check_rule('authdel')){
-            $info['butdel'] = self::_catebut('authdel', '删除权限', $info['id'], '您确认要删除该权限吗?', 2);
+            $info['butdel'] = self::_public_cate_but('authdel', '删除权限', $info['id'], '您确认要删除该权限吗?', 2);
         }
+        self::_button($but);
         $this->assign('info', $info);
+        $this->display();
+    }
+
+    /** 添加权限 */
+    public function auth_edit(){
+        $this -> model = model('system_rules');
+        if(IS_POST){
+            self::_public_add('rules');
+        }
+        $id = I('get','id', 0, 'intval');
+        //创建token
+        create_token();
+        if($id == 0){
+            $info['level'] = 999;
+        }else{
+            $where = array(
+                'status' => 1,
+                'id'     => $id
+            );
+            $info =self::_public_find($where,1);
+        }
+
+        $this -> assign('info',$info);
         $this->display();
     }
 }

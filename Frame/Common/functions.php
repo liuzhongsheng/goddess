@@ -288,7 +288,19 @@ function objectToArray($e){
     return $e;
 }
 
-
+/**
+ * 大小写转换
+ * @param string $str 要转换的字符串
+ * @param int    $type转换模式 1是首字母转为大写 2是换为小写
+ **/
+function letterChange($str,$type=1)
+{
+    if($type == 1){
+        return ucfirst(trim($str));
+    }else{
+        return strtolower(trim($str));
+    }
+}
 
 
 

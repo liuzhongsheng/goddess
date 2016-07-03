@@ -71,7 +71,7 @@ class private_controller extends public_controller{
      * @param $type int 为0时直接渲染到页面 为1时返回查询到的数组
      **/
     protected function _public_find($where = array('status'=>1), $type = 0){
-        $info = $model -> where($where)->find();
+        $info = $this -> model -> where($where)->find();
         if($type == 1){
             return $info;
         }else{
@@ -88,7 +88,6 @@ class private_controller extends public_controller{
      */
     protected function _public_count($where = array('status'=>1), $type = 1,$num='')
     {
-
         $model = $this->model;
         $count =  $model -> total($where);
         if($type == 1){
@@ -203,5 +202,41 @@ class private_controller extends public_controller{
             'pageUrl'     => ''
         );
         return $list;
+    }
+
+    /**
+     * isBbutton 控制分组页面按钮类型
+     * @param string $title 弹出框标题
+     * @param string $url 跳转地址
+     * @param int $type 跳转类型: 1为添加 2为其他
+     * @author 刘中胜
+     * @time 2015-15-05
+     **/
+    protected function _public_cate_but($url, $title, $id = 0, $msg = '', $type = 1)
+    {
+        $res = self::_check_rule($url,1);
+        if($res){
+            if($id != 0){
+                $where = array(
+                    'id' => $id
+                );
+                $url = Url($url, $where);
+            }else{
+                $url = Url($url);
+            }
+
+            if($type == 1){
+                $butArr = array(
+                    'data-opt' => "{title:'" . "$title',url:'" . "$url'" . '}',
+                    'title'    => '添 加',
+                );
+            }else{
+                $butArr = array(
+                    'data-opt' => "{title:'" . "$title',url:'" . "$url',msg:'" . "$msg'" . '}',
+                    'title'    => '删 除',
+                );
+            }
+        }
+        return $butArr;
     }
 }
